@@ -2,7 +2,7 @@ from argparse import ArgumentParser
 
 import turkish_normalization.turkish_levenshtein as t_lev
 from turkish_normalization.utils import read_data
-from turkish_normalization.utils.turkish_satinize import turkishCompare
+from turkish_normalization.utils.turkish_sanitize import turkish_compare
 
 insert_chars = "aeıioöuüğyr'h"
 substitute_chars = [
@@ -36,9 +36,9 @@ delete_char = "ıi" # sıtandart, tiren
 
 def make_parser(prog):
     parser = ArgumentParser(prog=prog)
-    parser.add_argument("target_word", help="the target word to be reached")
-    parser.add_argument("source_words_file", help="Json files that contains possible incorrect words")
-    parser.add_argument("result_file", help="Path for the results to be written")
+    parser.add_argument("--target_word", help="the target word to be reached")
+    parser.add_argument("--source_words_file", help="Json files that contains possible incorrect words")
+    parser.add_argument("--result_file", help="Path for the results to be written")
     parser.add_argument("--threshold", type=float, default=None, help="Threshold value for Levenshtein Distance")
     parser.add_argument("--verbose", action="store_true")
     return parser
