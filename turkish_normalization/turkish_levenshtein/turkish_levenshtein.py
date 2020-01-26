@@ -6,9 +6,9 @@ from turkish_normalization.utils.turkish_sanitize import turkish_spesific_chars 
 # TODO: add docstrings
 # TODO: add type annotations
 
-# TURKISH_ENCODING = "iso-8859-9"
+TURKISH_ENCODING = "iso-8859-9"
 # TURKISH_ENCODING = "lev-turkish"
-TURKISH_ENCODING = "ascii"
+# TURKISH_ENCODING = "ascii"
 
 START_POS = 64 - len(tsc)
 assert START_POS > 32 # printable character begin
@@ -26,26 +26,36 @@ def tur_enc(src_str):
         res = src_str.encode(TURKISH_ENCODING)
     except UnicodeEncodeError:
         src_str = src_str.translate(ascii_translate_table)
-        # try:
-        res = src_str.encode(TURKISH_ENCODING)
-        # except UnicodeEncodeError:
-        #     res = b""
+        try:
+            res = src_str.encode(TURKISH_ENCODING)
+        except UnicodeEncodeError:
+            res = res = src_str.encode("windows-1252")
     return res
 
 set_costs = wl.set_costs
 
 def initiliaze_costs(*tuples):
-    chars = tuples[0][0][0]
+    chars = tuples[0][0]
     if isinstance(chars, tuple):
         np_costs = np.ones((256, 256), dtype=np.float64)
-        for chars, cost in tuples:
-            for f, t in chars:
-                np_costs[w_ord(f), w_ord(t)] = cost
+        cost = tuples[1]
+        for chars in tuples[0]:
+            f = chars[0]
+            t = chars[1]
+            np_costs[w_ord(f), w_ord(t)] = cost
+            # for f, t in chars:
+            #     np_costs[w_ord(f), w_ord(t)] = cost
     else:
         np_costs = np.ones(256, dtype=np.float64)
-        for chars, cost in tuples:
+        if len(tuples) == 2:
+            chars = tuples[0]
+            cost = tuples[1]
             for c in chars:
                 np_costs[w_ord(c)] = cost
+        else:
+            for chars, cost in tuples:
+                for c in chars:
+                    np_costs[w_ord(c)] = cost
     return np_costs
 
 def get_zero_array():
