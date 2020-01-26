@@ -1,5 +1,5 @@
 from unidecode import unidecode
-from .chars import possible_latin_chars
+from turkish_normalization.utils.chars import possible_latin_chars
 
 
 turkish_lcase = "abcçdefgğhıijklmnoöprsştuüvyz"
