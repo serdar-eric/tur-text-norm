@@ -16,10 +16,11 @@ def write_plain(path, data):
     with open(path, "w") as fp:
         fp.write("\n".join(data))
 
-read_data = read_json
 def read_json(filename):
     with open(filename) as fp:
         return json.load(fp)
+
+read_data = read_json
 
 def write_json(filename, data):
     with open(filename, 'w') as fp:
